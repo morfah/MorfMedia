@@ -1,0 +1,22 @@
+<NotepadPlus>
+    <Project name="MorfMedia">
+        <File name=".htaccess" />
+        <File name="config.php" />
+        <File name="cookies.js" />
+        <File name="error.php" />
+        <File name="index.php" />
+        <File name="logon.php" />
+        <File name="mkvinfo.txt" />
+        <File name="subtitles.php" />
+        <File name="thumbnail.php" />
+        <File name="thumbnail_imdb.php" />
+        <File name="validate.php" />
+        <Folder name="css">
+            <File name="css\logon.css" />
+            <File name="css\watch.css" />
+        </Folder>
+        <Folder name="js">
+            <File name="js\watch.js" />
+        </Folder>
+    </Project>
+</NotepadPlus>

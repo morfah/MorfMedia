@@ -1,0 +1,75 @@
+body{
+	color:#FFF;
+	background-color: #333;
+	margin: 0;
+	font-family: "Verdana";
+	height:100%;
+}
+div#fullscreen{
+	display:block;
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+}
+div#content{
+	position: absolute;
+	width:auto;
+	height:auto;
+	left:230px;
+	right:230px;
+	top:4px;
+	background-color: #222;
+	border: 20px solid #222;
+	border-radius: 15px;
+	text-align:center;
+}
+.sidepanel{
+	text-align:center;
+	paddign:5px;
+	color:inherit;
+	background-color: #444;
+	overflow: auto;
+	width: 225px;
+	height: 100%;
+	word-wrap: break-word;
+}
+.episodes{
+	float: right;
+	border-left: 1px #FFF solid;
+}
+.movies{
+	float: left;
+	border-right: 1px #FFF solid;
+}
+.item{
+	display:block;
+	padding: 20px 0;
+	border-bottom: 1px #FFF solid;
+}
+.bigtit{
+	color:#FFF;
+	background-color:transparent;
+	text-shadow: #000 0px 0px 20px;
+	font-size: 20pt;
+}
+.smalltit{
+	color:#FFF;
+	background-color:transparent;
+	text-shadow: #000 0px 0px 5px;
+	font-size: 8pt;
+}
+a{
+	color:inherit;
+	background-color:inherit;
+	text-decoration:none;
+}
+.currentlyplaying{
+	color:inherit;
+	background-color:#222;
+}
+img.thumbnail{
+	width:auto;
+	height: 90px;
+}
