@@ -72,8 +72,6 @@ if (isset($_GET["mode"]))
 			try{
 				document.getElementById("movies").scrollTop = document.getElementById("<?php echo $folder_series_url;?>").offsetTop;
 				document.getElementById("episodes").scrollTop = document.getElementById("<?php echo $morf_mediafilename_url;?>").offsetTop;
-				alert(document.getElementById("<?php echo $folder_series_url;?>").offsetTop);
-				alert(document.getElementById("<?php echo $morf_mediafilename_url;?>").offsetTop);
 			}
 			catch (err){
 				//alert(err);
