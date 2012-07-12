@@ -37,9 +37,8 @@ $morf_mediafilename_url = rawurlencode($morf_mediafilename);
 $morf_mediafilename_html = htmlentities($morf_mediafilename, ENT_COMPAT, "UTF-8");
 
 $morf_movie_url = str_replace("%2F","/", rawurlencode($morf_mediafilepath . $morf_mediafilename));
-$morf_subtitle_url = "metadata/" . $morf_mediafilename_url .  ".ass";
-$morf_poster_html = "metadata/" . $morf_mediafilename_html . ".jpg";
-$morf_poster_url = "metadata/" . $morf_mediafilename_url . ".jpg";
+$morf_metadata_subtitle_url = str_replace("%2F","/", rawurlencode("metadata/" . $folder . "/" . $morf_mediafilename . ".ass"));
+$morf_metadata_poster_url = str_replace("%2F","/", rawurlencode("metadata/" . $folder . "/" . $morf_mediafilename . ".jpg"));
 
 $mode = "vlc";
 if (isset($_GET["mode"]))
@@ -80,8 +79,8 @@ if (isset($_GET["mode"]))
 	</script>
 		  
 	<!-- adds some more features to the html5 player -->
-	<link href="video-js/video-js.css" rel="stylesheet">
-	<script src="video-js/video.js"></script>
+	<link href="video-js/dist/video-js.css" rel="stylesheet">
+	<script src="video-js/dist/video.js"></script>
 	
 <?php if(substr($morf_mediafilename, -4) == ".mkv"):?>
 	<!-- adds .ass subtitle support -->
@@ -98,7 +97,7 @@ if (isset($_GET["mode"]))
 		
 		window.onload = function(){
 			prepareCaptions();
-			fetchASSFile(<?php echo $morf_subtitle_url;?>);
+			fetchASSFile(<?php echo $morf_metadata_subtitles_url;?>);
 		}
 	</script>
 <?php endif;?>
@@ -169,7 +168,7 @@ for($i=0; $i < count($morf_mediafiles); $i++){
 if ($mode == "html5"):
 ?>
 <video id="my_video_1" class="video-js vjs-default-skin" controls="controls" preload="none" width="1280" height="720"
-	poster="<?php echo $morf_poster_url;?>" data-setup="{}" ontimeupdate="videoTimeUpdate()">
+	poster="<?php echo $morf_metadata_poster_url;?>" data-setup="{}" ontimeupdate="videoTimeUpdate()">
 	<source src="<?php echo $morf_movie_url;?>" type="video/mp4">
 	<!--<source src="<?php echo $morf_movie_url;?>" type='video/mp4; codecs="avc1.64001E, mp4a.40.2"'>-->
 	<!--<source src="<?php echo $morf_movie_url;?>" type='video/mp4; codecs="a_ac3, avc"'>-->
@@ -181,13 +180,13 @@ elseif ($mode == "divx"):
 	<param name="classid" value="clsid:67DABFBF-D0AB-41fa-9C46-CC0F21721616">
 	<param name="codebase" value="http://go.divx.com/plugin/DivXBrowserPlugin.cab">
 	<param name="custommode" value="none">
-	<param name="previewImage" value="<?php echo $morf_poster_html;?>">
+	<param name="previewImage" value="<?php echo $morf_metadata_poster_url;?>">
 	<param name="autoPlay" value="true">
 	<param name="src" value="<?php echo $morf_movie_url;?>">
 	
 	<embed type="video/divx" src="<?php echo $morf_movie_url;?>"
 		custommode="none" width="1280" height="720" autoPlay="false" 
-		previewImage="<?php echo $morf_poster_html;?>"
+		previewImage="<?php echo $morf_metadata_poster_url;?>"
 		pluginspage="http://go.divx.com/plugin/download/">
 </object>
 <?php // ------------------- VLC -------------------
