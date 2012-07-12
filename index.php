@@ -52,7 +52,7 @@ if (isset($_GET["mode"]))
 
 // Checks if admin logged in (session set)
 if (!isset($_SESSION['sess_user'])){
-	header("Location: logon.php?sessiontimeout=1&folder=".$folder_url."&id=".$id."&mode=".$mode);
+	header("Location: logon.php?sessiontimeout=1&folder=".$folder_url."&id=".$morf_mediaid."&mode=".$mode);
 	exit;
 }
 
