@@ -1,12 +1,6 @@
 <?php
 session_start(); // Always first
 
-// Checks if admin logged in (session set)
-if (!isset($_SESSION['sess_user'])){
-	header("Location: logon.php?sessiontimeout");
-	exit;
-}
-
 if (isset($_GET["folder"]))
 	$folder = $_GET["folder"];
 else
@@ -37,7 +31,7 @@ $morf_mediafilename_url = rawurlencode($morf_mediafilename);
 $morf_mediafilename_html = htmlentities($morf_mediafilename, ENT_COMPAT, "UTF-8");
 
 $morf_movie_url = str_replace("%2F","/", rawurlencode($morf_mediafilepath . $morf_mediafilename));
-$morf_metadata_subtitle_url = str_replace("%2F","/", rawurlencode("metadata/" . $folder . "/" . $morf_mediafilename . ".ass"));
+$morf_metadata_subtitles_url = str_replace("%2F","/", rawurlencode("metadata/" . $folder . "/" . $morf_mediafilename . ".ass"));
 $morf_metadata_poster_url = str_replace("%2F","/", rawurlencode("metadata/" . $folder . "/" . $morf_mediafilename . ".jpg"));
 
 $mode = "vlc";
@@ -54,6 +48,14 @@ if (isset($_GET["mode"]))
 	elseif ($_GET["mode"] == "wmp")
 		$mode = "wmp";
 }
+
+
+// Checks if admin logged in (session set)
+if (!isset($_SESSION['sess_user'])){
+	header("Location: logon.php?sessiontimeout=1&folder=".$folder_url."&id=".$id."&mode=".$mode);
+	exit;
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -76,6 +78,26 @@ if (isset($_GET["mode"]))
 				//alert(err);
 			}
 		}
+		
+		//.ass script
+		function videoTimeUpdate(){
+			try{
+				ASSCaptionsUpdate();
+			}
+			catch (err){
+				alert(err);
+			}
+		}
+		
+		window.onload = function(){
+			try{
+				prepareCaptions();
+				fetchASSFile("<?php echo $morf_metadata_subtitles_url;?>");
+			}
+			catch(err){
+				alert(err);
+			}
+		}
 	</script>
 		  
 	<!-- adds some more features to the html5 player -->
@@ -90,15 +112,7 @@ if (isset($_GET["mode"]))
 	<script src="html5-ass-subtitles/example.js"></script>
 
 	<script type="text/javascript">
-		//.ass script
-		function videoTimeUpdate(){
-			ASSCaptionsUpdate();
-		}
-		
-		window.onload = function(){
-			prepareCaptions();
-			fetchASSFile(<?php echo $morf_metadata_subtitles_url;?>);
-		}
+
 	</script>
 <?php endif;?>
 

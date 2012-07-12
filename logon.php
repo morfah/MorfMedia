@@ -19,29 +19,34 @@ if ($fetch["timezone"]!="") date_default_timezone_set($fetch["timezone"]);
 
 // Logging in
 if (isset($_POST['submit'])){
-  if (valid($_POST['username'], 1, 20)){ 
-	  $sql = "SELECT * FROM users WHERE username='" . $_POST['username'] . "' AND password='" . sha1($_POST['password']) . "'";
-	  $result = mysql_query($sql);
-	 
-	  // If username and/or password wasn't found
-	  // send an error to the form
-	  if (mysql_num_rows($result) == 0){
-		header("Location: logon.php?badlogin=1");
+	if (valid($_POST['username'], 1, 20)){ 
+		$sql = "SELECT * FROM users WHERE username='" . $_POST['username'] . "' AND password='" . sha1($_POST['password']) . "'";
+		$result = mysql_query($sql);
+
+		// If username and/or password wasn't found
+		// send an error to the form
+		if (mysql_num_rows($result) == 0){
+			header("Location: logon.php?badlogin=1");
+			exit;
+		}
+
+		// Set session with unique index
+		$_SESSION['sess_id'] = mysql_result($result, 0, 'id_users');
+		$_SESSION['sess_user'] = $_POST['username'];
+		$_SESSION['sess_pass'] = sha1($_POST['password']);
+		// Updating "last_login" 
+		$sql2 = "UPDATE users SET last_login = '" . date('Y-m-d H:i:s') . "' WHERE id_users=" . $_SESSION['sess_id'];
+		@mysql_query($sql2) or die("error...");
+		if (isset($_POST["folder"]))
+			header("Location: index.php?folder=" . $_POST["folder"]."&id=".$_POST["id"]."&mode=".$_POST["mode"]); // Redirecting to index.php
+		else
+			header("Location: index.php"); // Redirecting to index.php
+		
 		exit;
-	  }
-	 
-	  // Set session with unique index
-	  $_SESSION['sess_id'] = mysql_result($result, 0, 'id_users');
-	  $_SESSION['sess_user'] = $_POST['username'];
-	  $_SESSION['sess_pass'] = sha1($_POST['password']);
-	  // Updating "last_login" 
-	  $sql2 = "UPDATE users SET last_login = '" . date('Y-m-d H:i:s') . "' WHERE id_users=" . $_SESSION['sess_id'];
-	  @mysql_query($sql2) or die("error...");
-	  header("Location: index.php"); // Redirecting to index.php
-	  exit;
-  } 
-  else
-  	header("Location: logon.php?badlogin=");
+	} 
+	else{
+		header("Location: logon.php?badlogin=");
+	}
 }
  
 // Logging out
@@ -104,7 +109,14 @@ if (!isset($_SESSION['sess_user'])){
 <tr><td class="relatedLinks">Username:</td><td class="relatedLinks"><input name="username" type="text" id="username" tabindex="1"></td></tr>
 <tr><td class="relatedLinks">Password:</td><td class="relatedLinks"><input name="password" type="password" id="password" tabindex="2"></td></tr>
 <tr><td colspan="2">&nbsp;</td></tr>
-<tr><td colspan="2" align="right"><input name="submit" type="submit" id="submit" tabindex="3" value="Login" disabled="disabled"></td></tr>
+<tr><td colspan="2" align="right">
+	<input name="submit" type="submit" id="submit" tabindex="3" value="Login" disabled="disabled">
+<?php if(isset($_GET["folder"]) && isset($_GET["id"]) && isset($_GET["mode"])):?>
+	<input name="folder" id="folder" type="hidden" value="<?php echo rawurlencode($_GET["folder"]);?>">
+	<input name="id" id="id" type="hidden" value="<?php echo $_GET["id"];?>">
+	<input name="mode" id="mode" type="hidden" value="<?php echo $_GET["mode"];?>">
+<?php endif;?>
+</td></tr>
 </table>
 </form>
 <noscript>
