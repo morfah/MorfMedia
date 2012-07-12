@@ -39,12 +39,15 @@ $morf_mediafilename_html = htmlentities($morf_mediafilename, ENT_COMPAT, "UTF-8"
 $morf_movie_url = str_replace("%2F","/", rawurlencode($morf_mediafilepath . $morf_mediafilename));
 $morf_subtitle_url = "metadata/" . $morf_mediafilename_url .  ".ass";
 $morf_poster_html = "metadata/" . $morf_mediafilename_html . ".jpg";
+$morf_poster_url = "metadata/" . $morf_mediafilename_url . ".jpg";
 
 $mode = "vlc";
 if (isset($_GET["mode"]))
 {
 	if ($_GET["mode"] == "divx")
 		$mode = "divx";
+	elseif ($_GET["mode"] == "html5")
+		$mode = "html5";
 	elseif ($_GET["mode"] == "vlc")
 		$mode = "vlc";
 	elseif ($_GET["mode"] == "qt")
@@ -74,6 +77,17 @@ if (isset($_GET["mode"]))
 	<script src="html5-ass-subtitles/assparser_utils.js"></script>
 	<script src="html5-ass-subtitles/example.js"></script>
 	<script type="text/javascript">
+		//autoscroll script
+		function ScrollToCurrentlyplaying(){
+			try{
+				document.getElementById("movies").scrollTop = document.getElementById("<?php echo $folder_series_url;?>").offsetTop;
+				document.getElementById("episodes").scrollTop = document.getElementById("<?php echo $morf_mediafilename_url;?>").offsetTop;
+			}
+			catch (err){
+				alert(err);
+			}
+		}
+		
 		//.ass script
 		function videoTimeUpdate(){
 			ASSCaptionsUpdate();
@@ -82,16 +96,6 @@ if (isset($_GET["mode"]))
 		window.onload = function(){
 			prepareCaptions();
 			fetchASSFile(<?php echo $morf_subtitle_url;?>);
-		}
-		
-		function ScrollToCurrentlyplaying(){
-			try{
-				document.getElementById("movies").scrollTop = document.getElementById("<?php echo $folder_series_url;?>").offsetTop;
-				document.getElementById("episodes").scrollTop = document.getElementById("<?php echo $morf_mediafilename_url;?>").offsetTop;
-			}
-			catch (err){
-				//alert(err);
-			}
 		}
 	</script>
 </head>
@@ -116,8 +120,8 @@ for($i=2; $i < count($morf_series); $i++){
 	<span class="item<?php if ($morf_series[$i] == $folder_series):?> currentlyplaying<?php endif;?>" id="<?php echo rawurlencode($morf_series[$i]);?>">
 		<a href="?folder=<?php echo rawurlencode($morf_series[$i]);?>&amp;id=0&amp;mode=<?php echo $mode;?>">
 			<img src="metadata/<?php echo rawurlencode($morf_series[$i]);?>.jpg" alt="Missing image.">
-		</a>
 		<br><span class="smalltit"><?php echo htmlentities($morf_series[$i], ENT_COMPAT, "UTF-8");?></span>
+		</a>
 		
 		<!--<form action="thumbnail_imdb.php" method="post" enctype="multipart/form-data" style="display:none;">
 			<input type="file" name="<?php echo $morf_series[$i];?>">
@@ -160,9 +164,9 @@ for($i=0; $i < count($morf_mediafiles); $i++){
 if ($mode == "html5"):
 ?>
 <video id="my_video_1" class="video-js vjs-default-skin" controls="controls" preload="none" width="1280" height="720"
-	poster="<?php echo $morf_poster_html;?>" data-setup="{}" ontimeupdate="videoTimeUpdate()">
-	<!--<source src="<?php echo $morf_movie_url;?>" type='video/mp4; codecs="avc1.64001E, mp4a.40.2"'>-->
+	poster="<?php echo $morf_poster_url;?>" data-setup="{}" ontimeupdate="videoTimeUpdate()">
 	<source src="<?php echo $morf_movie_url;?>" type="video/mp4">
+	<!--<source src="<?php echo $morf_movie_url;?>" type='video/mp4; codecs="avc1.64001E, mp4a.40.2"'>-->
 	<!--<source src="<?php echo $morf_movie_url;?>" type='video/mp4; codecs="a_ac3, avc"'>-->
 </video>
 <?php // ------------------- DIVX -------------------
@@ -197,24 +201,24 @@ elseif ($mode == "vlc"):
 elseif ($mode == "qt"):
 ?>
 <object width="1280" height="720" data="<?php echo $morf_movie_url;?>">
- <param name="classid" value="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B">
- <param name="codebase" value="http://www.apple.com/qtactivex/qtplugin.cab">
- <param name="src" value="<?php echo $morf_movie_url;?>">
- <param name="controller" value="true">
- </object>
+	<param name="classid" value="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B">
+	<param name="codebase" value="http://www.apple.com/qtactivex/qtplugin.cab">
+	<param name="src" value="<?php echo $morf_movie_url;?>">
+	<param name="controller" value="true">
+</object>
 <?php // ------------------- Windows Media Player -------------------
 elseif ($mode == "wmp"):
 ?>
 <object width="1280" height="720" type="video/x-ms-asf" url="<?php echo $morf_movie_url;?>" data="<?php echo $morf_movie_url;?>">
- <param name="classid" value="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6">
- <param name="url" value="<?php echo $morf_movie_url;?>">
- <param name="filename" value="<?php echo $morf_movie_url;?>">
- <param name="autostart" value="1">
- <param name="uiMode" value="full">
- <param name="autosize" value="1">
- <param name="playcount" value="1"> 
- <embed type="application/x-mplayer2" src="<?php echo $morf_movie_url;?>" width="1280" height="720" autostart="true" showcontrols="true" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/">
- </object>
+	<param name="classid" value="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6">
+	<param name="url" value="<?php echo $morf_movie_url;?>">
+	<param name="filename" value="<?php echo $morf_movie_url;?>">
+	<param name="autostart" value="1">
+	<param name="uiMode" value="full">
+	<param name="autosize" value="1">
+	<param name="playcount" value="1"> 
+	<embed type="application/x-mplayer2" src="<?php echo $morf_movie_url;?>" width="1280" height="720" autostart="true" showcontrols="true" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/">
+</object>
 <?php
 endif; // ------------------------------------------
 ?>
