@@ -66,28 +66,33 @@ if (isset($_GET["mode"]))
 		  href="movie-icon.png">
 		  
 	<link href="css/watch.css" rel="stylesheet">
-		  
-	<!-- adds some more features to the html5 player -->
-	<link href="video-js/video-js.css" rel="stylesheet">
-	<script src="video-js/video.js"></script>
-	
-	<!-- adds ass subtitle support -->
-	<link href="html5-ass-subtitles/example.css" rel="stylesheet">
-	<script src="html5-ass-subtitles/assparser.js"></script>
-	<script src="html5-ass-subtitles/assparser_utils.js"></script>
-	<script src="html5-ass-subtitles/example.js"></script>
 	<script type="text/javascript">
 		//autoscroll script
 		function ScrollToCurrentlyplaying(){
 			try{
 				document.getElementById("movies").scrollTop = document.getElementById("<?php echo $folder_series_url;?>").offsetTop;
 				document.getElementById("episodes").scrollTop = document.getElementById("<?php echo $morf_mediafilename_url;?>").offsetTop;
+				alert(document.getElementById("<?php echo $folder_series_url;?>").offsetTop);
+				alert(document.getElementById("<?php echo $morf_mediafilename_url;?>").offsetTop);
 			}
 			catch (err){
-				alert(err);
+				//alert(err);
 			}
 		}
-		
+	</script>
+		  
+	<!-- adds some more features to the html5 player -->
+	<link href="video-js/video-js.css" rel="stylesheet">
+	<script src="video-js/video.js"></script>
+	
+<?php if(substr($morf_mediafilename, -4) == ".mkv"):?>
+	<!-- adds .ass subtitle support -->
+	<link href="html5-ass-subtitles/example.css" rel="stylesheet">
+	<script src="html5-ass-subtitles/assparser.js"></script>
+	<script src="html5-ass-subtitles/assparser_utils.js"></script>
+	<script src="html5-ass-subtitles/example.js"></script>
+
+	<script type="text/javascript">
 		//.ass script
 		function videoTimeUpdate(){
 			ASSCaptionsUpdate();
@@ -98,6 +103,8 @@ if (isset($_GET["mode"]))
 			fetchASSFile(<?php echo $morf_subtitle_url;?>);
 		}
 	</script>
+<?php endif;?>
+
 </head>
 <body onload="ScrollToCurrentlyplaying()">
 <div id="fullscreen">
