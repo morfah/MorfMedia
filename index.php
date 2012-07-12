@@ -29,6 +29,10 @@ sort($morf_mediafiles); //Sort epsiodes alphabetically.
 $morf_mediafilename = basename($morf_mediafiles[$morf_mediaid]);
 $morf_mediafilename_url = rawurlencode($morf_mediafilename);
 $morf_mediafilename_html = htmlentities($morf_mediafilename, ENT_COMPAT, "UTF-8");
+if (substr($morf_mediafilename, -4) == ".mkv")
+	$is_mkv = true;
+else
+	$is_mkv = false;
 
 $morf_movie_url = str_replace("%2F","/", rawurlencode($morf_mediafilepath . $morf_mediafilename));
 $morf_metadata_subtitles_url = str_replace("%2F","/", rawurlencode("metadata/" . $folder . "/" . $morf_mediafilename . ".ass"));
@@ -66,6 +70,39 @@ if (!isset($_SESSION['sess_user'])){
 		  type="image/png" 
 		  href="movie-icon.png">
 		  
+	<!-- adds some more features to the html5 player -->
+	<link href="video-js/dist/video-js.css" rel="stylesheet">
+	<script src="video-js/dist/video.js"></script>
+	
+<?php if($is_mkv):?>
+	<!-- adds .ass subtitle support -->
+	<link href="html5-ass-subtitles/example.css" rel="stylesheet">
+	<script src="html5-ass-subtitles/assparser_utils.js" type="text/javascript"></script>
+	<script src="html5-ass-subtitles/assparser.js" type="text/javascript"></script>
+	<script src="html5-ass-subtitles/example.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		//.ass script
+		function videoTimeUpdate(){
+			try{
+				ASSCaptionsUpdate();
+			}
+			catch (err){
+				//alert(err);
+			}
+		}
+		
+		function loadSubtitles(){
+			try{
+				prepareCaptions();
+				fetchASSFile("<?php echo $morf_metadata_subtitles_url;?>");
+			}
+			catch(err){
+				//alert(err);
+			}
+		}
+	</script>
+<?php endif;?>
+		  
 	<link href="css/watch.css" rel="stylesheet">
 	<script type="text/javascript">
 		//autoscroll script
@@ -79,45 +116,9 @@ if (!isset($_SESSION['sess_user'])){
 			}
 		}
 		
-		//.ass script
-		function videoTimeUpdate(){
-			try{
-				ASSCaptionsUpdate();
-			}
-			catch (err){
-				alert(err);
-			}
-		}
-		
-		window.onload = function(){
-			try{
-				prepareCaptions();
-				fetchASSFile("<?php echo $morf_metadata_subtitles_url;?>");
-			}
-			catch(err){
-				alert(err);
-			}
-		}
 	</script>
-		  
-	<!-- adds some more features to the html5 player -->
-	<link href="video-js/dist/video-js.css" rel="stylesheet">
-	<script src="video-js/dist/video.js"></script>
-	
-<?php if(substr($morf_mediafilename, -4) == ".mkv"):?>
-	<!-- adds .ass subtitle support -->
-	<link href="html5-ass-subtitles/example.css" rel="stylesheet">
-	<script src="html5-ass-subtitles/assparser.js"></script>
-	<script src="html5-ass-subtitles/assparser_utils.js"></script>
-	<script src="html5-ass-subtitles/example.js"></script>
-
-	<script type="text/javascript">
-
-	</script>
-<?php endif;?>
-
 </head>
-<body onload="ScrollToCurrentlyplaying()">
+<body onload="ScrollToCurrentlyplaying(); loadSubtitles();">
 <div id="fullscreen">
 
 <?php
@@ -125,7 +126,7 @@ if (!isset($_SESSION['sess_user'])){
 		require("thumbnail.php");
 		
 		//animes only? FIXME: this always assumes track id3 is subtitles
-	if (!file_exists(dirname(__FILE__) . "/metadata/" . $folder . "/" . $morf_mediafilename . ".ass") && substr($morf_mediafilename, -4) == ".mkv")
+	if (!file_exists(dirname(__FILE__) . "/metadata/" . $folder . "/" . $morf_mediafilename . ".ass") && $is_mkv)
 		require("subtitles.php");
 ?>
 
@@ -267,7 +268,7 @@ endif; // ------------------------------------------
 	
 
 <?php
-if (substr($morf_mediafilename, -4) == ".mkv"){
+if ($is_mkv){
 	//exec("mkvinfo \"" . dirname(__FILE__) . "/" . $morf_mediafilepath . $morf_mediafilename . "\" > mkvinfo.txt");
 ?>
 <pre>
