@@ -1,0 +1,6 @@
+[submodule "video-js"]
+	path = video-js
+	url = git://github.com/morfah/video-js.git
+[submodule "html5-ass-subtitles"]
+	path = html5-ass-subtitles
+	url = git://github.com/morfah/html5-ass-subtitles.git
