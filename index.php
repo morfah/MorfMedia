@@ -66,9 +66,20 @@ if (!isset($_SESSION['sess_user'])){
 <head>
 	<title><?php echo $morf_mediafilename_html;?></title>
 	<meta charset="UTF-8">
-	<link rel="icon" 
-		  type="image/png" 
-		  href="movie-icon.png">
+	<link rel="icon" type="image/png" href="movie-icon.png">
+	<link href="css/watch.css" rel="stylesheet">
+	<script type="text/javascript">
+		//autoscroll script
+		function ScrollToCurrentlyplaying(){
+			try{
+				document.getElementById("movies").scrollTop = document.getElementById("<?php echo $folder_series_url;?>").offsetTop;
+				document.getElementById("episodes").scrollTop = document.getElementById("<?php echo $morf_mediafilename_url;?>").offsetTop;
+			}
+			catch (err){
+				//alert(err);
+			}
+		}
+	</script>
 		  
 	<!-- adds some more features to the html5 player -->
 	<link href="video-js/dist/video-js.css" rel="stylesheet">
@@ -102,21 +113,6 @@ if (!isset($_SESSION['sess_user'])){
 		}
 	</script>
 <?php endif;?>
-		  
-	<link href="css/watch.css" rel="stylesheet">
-	<script type="text/javascript">
-		//autoscroll script
-		function ScrollToCurrentlyplaying(){
-			try{
-				document.getElementById("movies").scrollTop = document.getElementById("<?php echo $folder_series_url;?>").offsetTop;
-				document.getElementById("episodes").scrollTop = document.getElementById("<?php echo $morf_mediafilename_url;?>").offsetTop;
-			}
-			catch (err){
-				//alert(err);
-			}
-		}
-		
-	</script>
 </head>
 <body onload="ScrollToCurrentlyplaying(); loadSubtitles();">
 <div id="fullscreen">
