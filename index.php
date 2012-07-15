@@ -22,7 +22,7 @@ $folder_series_url = rawurlencode($folder_series);
 $morf_seriespath="nas/Serier/";
 $morf_series = scandir(dirname(__FILE__) . "/" . $morf_seriespath);
 
-$morf_mediafilepath="nas/Serier/" . $folder . "/";
+$morf_mediafilepath= $morf_seriespath . $folder . "/";
 $morf_mediafiles = glob($morf_mediafilepath . "*.{avi,mkv}", GLOB_BRACE);
 sort($morf_mediafiles); //Sort epsiodes alphabetically.
 
@@ -173,7 +173,7 @@ for($i=0; $i < count($morf_mediafiles); $i++){
 <div id="content">
 
 <span class="smalltit"><?php echo $folder_html;?></span><br>
-<span class="bigtit"><?php echo $morf_mediafilename;?></span>
+<span class="bigtit"><?php echo $morf_mediafilename_html;?></span>
 
 <?php // ------------------- HTML5 -------------------
 if ($mode == "html5"):
@@ -239,36 +239,48 @@ endif; // ------------------------------------------
 ?>
 
 <br>
-<a href="?folder=<?php echo rawurlencode($folder);?>&amp;id=<?php echo $morf_mediaid;?>&amp;mode=html5">
-	<img src="icons/HTML5_Badge_32.png" width="16" height="16" alt="Image missing."> <?php if ($mode == "html5"):?><span class="currentlyplaying">HTML5</span><?php else: ?>HTML5<?php endif;?>
-</a> |
-<a href="?folder=<?php echo rawurlencode($folder);?>&amp;id=<?php echo $morf_mediaid;?>&amp;mode=vlc">
-	<img src="icons/vlc-icon.png" alt="Image missing."> <?php if ($mode == "vlc"):?><span class="currentlyplaying">VideoLAN</span><?php else: ?>VideoLAN<?php endif;?>
-</a> |
-<a href="?folder=<?php echo rawurlencode($folder);?>&amp;id=<?php echo $morf_mediaid;?>&amp;mode=divx">
-	<img src="icons/Divx-Player-icon.png" alt="Image missing."> <?php if ($mode == "divx"):?><span class="currentlyplaying">DivX Webplayer</span><?php else: ?>DivX Webplayer<?php endif;?>
-</a> |
-<a href="?folder=<?php echo rawurlencode($folder);?>&amp;id=<?php echo $morf_mediaid;?>&amp;mode=qt">
-	<img src="icons/Applic-Quicktime-icon.png" alt="Image missing."> <?php if ($mode == "qt"):?><span class="currentlyplaying">QuickTime</span><?php else: ?>QuickTime<?php endif;?>
-</a> |
-<a href="?folder=<?php echo rawurlencode($folder);?>&amp;id=<?php echo $morf_mediaid;?>&amp;mode=wmp">
-	<img src="icons/Windows-Media-Player-10-icon.png" alt="Image missing."> <?php if ($mode == "wmp"):?><span class="currentlyplaying">Windows Media Player</span><?php else: ?>Windows Media Player<?php endif;?>
-</a>
-<a href="logon.php?logout=">
-	<img src="icons/Apps-session-logout-icon.png" alt="Image missing."> Logout
-</a>
+
+<table width="1280" align="center">
+	<tr>
+		<td align="left">
+			<a href="?folder=<?php echo rawurlencode($folder);?>&amp;id=<?php echo $morf_mediaid;?>&amp;mode=html5">
+				<img src="icons/HTML5_Badge_32.png" width="16" height="16" alt="Image missing.">
+				<?php if ($mode == "html5"):?><span class="highlight">HTML5</span><?php else: ?>HTML5<?php endif;?>
+			</a> &bull;
+			<a href="?folder=<?php echo rawurlencode($folder);?>&amp;id=<?php echo $morf_mediaid;?>&amp;mode=vlc">
+				<img src="icons/vlc-icon.png" alt="Image missing.">
+				<?php if ($mode == "vlc"):?><span class="highlight">VideoLAN</span><?php else: ?>VideoLAN<?php endif;?>
+			</a> &bull;
+			<a href="?folder=<?php echo rawurlencode($folder);?>&amp;id=<?php echo $morf_mediaid;?>&amp;mode=divx">
+				<img src="icons/Divx-Player-icon.png" alt="Image missing.">
+				<?php if ($mode == "divx"):?><span class="highlight">DivX Webplayer</span><?php else: ?>DivX Webplayer<?php endif;?>
+			</a><!-- &bull;
+			<a href="?folder=<?php echo rawurlencode($folder);?>&amp;id=<?php echo $morf_mediaid;?>&amp;mode=qt">
+				<img src="icons/Applic-Quicktime-icon.png" alt="Image missing."> <?php if ($mode == "qt"):?><span class="highlight">QuickTime</span><?php else: ?>QuickTime<?php endif;?>
+			</a> &bull;
+			<a href="?folder=<?php echo rawurlencode($folder);?>&amp;id=<?php echo $morf_mediaid;?>&amp;mode=wmp">
+				<img src="icons/Windows-Media-Player-10-icon.png" alt="Image missing."> <?php if ($mode == "wmp"):?><span class="highlight">Windows Media Player</span><?php else: ?>Windows Media Player<?php endif;?>
+			</a>-->
+		</td>
+		<td align="right">
+			<a href="logon.php?logout=1">
+				<img src="icons/Apps-session-logout-icon.png" alt="Image missing.">
+				Logout
+			</a>
+		</td>
+	</tr>
+</table>
 
 
-<div class="smalltit" style="display:none;">
-	<span id="video-debug">&nbsp;</span>
-	
-
+<div class="smalltit">
+<pre>
+	<?php echo round((disk_free_space($morf_seriespath) / 1024 / 1024 / 1024), 2) . " GB free in " . $morf_seriespath;?>
+</pre>
 <?php
 if ($is_mkv){
 	//exec("mkvinfo \"" . dirname(__FILE__) . "/" . $morf_mediafilepath . $morf_mediafilename . "\" > mkvinfo.txt");
 ?>
 <pre>
-<strong>Mkv Info:</strong>
 <?php //echo file_get_contents("mkvinfo.txt");?>
 </pre>
 <?php

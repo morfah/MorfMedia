@@ -22,7 +22,7 @@ div#content{
 	top:4px;
 	background-color: #222;
 	border: 20px solid #222;
-	border-radius: 15px;
+	border-radius: 20px;
 	text-align:center;
 }
 .sidepanel{
@@ -72,4 +72,8 @@ a{
 img.thumbnail{
 	width:auto;
 	height: 90px;
+}
+.highlight{
+	color:#4D4;
+	background-color:inherit;
 }
