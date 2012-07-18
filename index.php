@@ -196,7 +196,7 @@ elseif ($mode == "divx"):
 	<param name="src" value="<?php echo $morf_movie_url;?>">
 	
 	<embed type="video/divx" src="<?php echo $morf_movie_url;?>"
-		custommode="none" width="1280" height="720" autoPlay="false" 
+		custommode="none" width="1280" height="720" autoPlay="true" 
 		previewImage="<?php echo $morf_metadata_poster_url;?>"
 		pluginspage="http://go.divx.com/plugin/download/">
 </object>
