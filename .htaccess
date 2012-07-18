@@ -1,6 +1,3 @@
 AddType video/divx .divx
 AddType video/divx .avi
 AddType video/divx .mkv
-
-RewriteEngine on
-RewriteRule ^/(*+)/?$ index.php?folder=$1 [L]

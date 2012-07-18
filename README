@@ -1,0 +1,8 @@
+This project is still pre-alpha and there is no Install script or databas files or anything. So it's pretty hard to install this on your own server.
+Right now only tested on Ubuntu but should work everywhere.
+
+General structure:
+This was made be installed on a server at home. It's best if your web server and NAS is the same server, but you can mount a samba share from a diffrent server too.
+And symlink that share in the MorfMedia root dir.
+
+On the Client computer you need a modern html5 browser and VLC & DivX webplayer.
