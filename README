@@ -2,7 +2,7 @@ This project is still pre-alpha and there is no Install script or databas files 
 Right now only tested on Ubuntu but should work everywhere.
 
 Purpose:
-Imagine you want to watch your series or movies away from home. This streams the content to your browser UNCOMRESSED.
+Imagine you want to watch your series or movies away from home. This streams the content to your browser UNCOMPRESSED.
 This requires a good internet upload connection where the server and media are. And it works perfecltly good on LAN too. I only use it on LAN at the moment.
 
 General structure:
