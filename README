@@ -1,8 +1,16 @@
 This project is still pre-alpha and there is no Install script or databas files or anything. So it's pretty hard to install this on your own server.
 Right now only tested on Ubuntu but should work everywhere.
 
+Purpose:
+Imagine you want to watch your series or movies away from home. This streams the content to your browser UNCOMRESSED.
+This requires a good internet upload connection where the server and media are. And it works perfecltly good on LAN too. I only use it on LAN at the moment.
+
 General structure:
-This was made be installed on a server at home. It's best if your web server and NAS is the same server, but you can mount a samba share from a diffrent server too.
+It's intended to be installed on a server at home. It's best if your web server and media storage is on same server, but you can mount a samba share from a diffrent server too.
 And symlink that share in the MorfMedia root dir.
 
-On the Client computer you need a modern html5 browser and VLC & DivX webplayer.
+On the Client computer you need a modern html5 browser, VLC & DivX webplayer.
+
+Install instructions:
+Right now you need to be good at php/mysql to make this work on your system.
+Install script and SqlLite database (to replace mysql) coming later.
