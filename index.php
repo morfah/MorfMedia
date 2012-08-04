@@ -138,7 +138,7 @@ for($i=2; $i < count($morf_series); $i++){
 		<br><span class="smalltit"><?php echo htmlentities($morf_series[$i], ENT_COMPAT, "UTF-8");?></span>
 		</a>
 		
-		<!--<form action="thumbnail_imdb.php" method="post" enctype="multipart/form-data" style="display:none;">
+		<!--<form action="thumbnail_imdb.php" method="post" enctype="multipart/form-data" style="display:visible;">
 			<input type="file" name="<?php echo $morf_series[$i];?>">
 			<input type="submit" value="Go!">
 			<input type="hidden" name="posterimage" value="<?php echo $morf_series[$i];?>">
