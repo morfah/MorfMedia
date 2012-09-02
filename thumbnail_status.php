@@ -1,8 +1,8 @@
 <?php
-$morf_seriespath="nas/Serier/";
-$morf_series = scandir(dirname(__FILE__) . "/" . $morf_seriespath);
-for ($i=2;count($morf_series)>$i;$i++){
-	$morf_mediafilepath= $morf_seriespath . $morf_series[$i] . "/";
+$morf_showspath="nas/Serier/";
+$morf_shows = scandir(dirname(__FILE__) . "/" . $morf_showspath);
+for ($i=2;count($morf_shows)>$i;$i++){
+	$morf_mediafilepath= $morf_showspath . $morf_shows[$i] . "/";
 	if (is_dir($morf_mediafilepath)){
 		$folder = basename($morf_mediafilepath);
 		$episodes = glob($morf_mediafilepath . "*.{avi,mkv}", GLOB_BRACE);

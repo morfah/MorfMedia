@@ -27,12 +27,12 @@ if (isset($_POST["posterimage"])){
 //else we try to get a image from IMDB.
 else{
 	// poster image.
-	$imdb = json_decode(file_get_contents("http://www.imdbapi.com/?t=" . rawurlencode($morf_series[$i])));
-	$morf_posterfile = dirname(__FILE__) . "/metadata/" . $morf_series[$i] . ".jpg";
+	$imdb = json_decode(file_get_contents("http://www.imdbapi.com/?t=" . rawurlencode($morf_shows[$i])));
+	$morf_posterfile = dirname(__FILE__) . "/metadata/" . $morf_shows[$i] . ".jpg";
 	$morf_posterfile_shell = escapeshellarg($morf_posterfile);
-	$morf_posterurl = escapeshellarg($imdb->{'Poster'});
-	//echo "wget -O $morf_posterfile_shell $morf_posterurl";
-	exec("wget -O $morf_posterfile_shell $morf_posterurl 2>&1");
+	$morf_posterurl_shell = escapeshellarg($imdb->{'Poster'});
+	//echo "wget -O $morf_posterfile_shell $morf_posterurl_shell";
+	exec("wget -O $morf_posterfile_shell $morf_posterurl_shell 2>&1");
 }
 
 //resize the image

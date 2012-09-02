@@ -14,15 +14,15 @@ else
 
 $folder_url = rawurlencode($folder);
 $folder_html = htmlentities($folder, ENT_COMPAT, "UTF-8");
-$folder_series = dirname($folder);
-if($folder_series == ".")
-	$folder_series = $folder;
-$folder_series_url = rawurlencode($folder_series);
+$folder_shows = dirname($folder);
+if($folder_shows == ".")
+	$folder_shows = $folder;
+$folder_shows_url = rawurlencode($folder_shows);
 
-$morf_seriespath="nas/Serier/";
-$morf_series = scandir(dirname(__FILE__) . "/" . $morf_seriespath);
+$morf_showspath="nas/Serier/";
+$morf_shows = scandir(dirname(__FILE__) . "/" . $morf_showspath);
 
-$morf_mediafilepath= $morf_seriespath . $folder . "/";
+$morf_mediafilepath= $morf_showspath . $folder . "/";
 $morf_mediafiles = glob($morf_mediafilepath . "*.{avi,mkv}", GLOB_BRACE);
 sort($morf_mediafiles); //Sort epsiodes alphabetically.
 
@@ -72,7 +72,7 @@ if (!isset($_SESSION['sess_user'])){
 		//autoscroll script
 		function ScrollToCurrentlyplaying(){
 			try{
-				document.getElementById("movies").scrollTop = document.getElementById("<?php echo $folder_series_url;?>").offsetTop;
+				document.getElementById("movies").scrollTop = document.getElementById("<?php echo $folder_shows_url;?>").offsetTop;
 				document.getElementById("episodes").scrollTop = document.getElementById("<?php echo $morf_mediafilename_url;?>").offsetTop;
 			}
 			catch (err){
@@ -111,6 +111,13 @@ if (!isset($_SESSION['sess_user'])){
 				//alert(err);
 			}
 		}
+		
+	var httpRequest;
+	if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+		httpRequest = new XMLHttpRequest();
+	} else if (window.ActiveXObject) { // IE 8 and older
+		httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+	}
 	</script>
 <?php endif;?>
 </head>
@@ -127,21 +134,21 @@ if (!isset($_SESSION['sess_user'])){
 ?>
 
 <div class="sidepanel movies" id="movies">
-<?php // ------------------- SERIES -------------------
-for($i=2; $i < count($morf_series); $i++){
-	if (!file_exists(dirname(__FILE__) . "/metadata/" . $morf_series[$i] . ".jpg"))
+<?php // ------------------------------------- SHOWS -------------------------------------
+for($i=2; $i < count($morf_shows); $i++){
+	if (!file_exists(dirname(__FILE__) . "/metadata/" . $morf_shows[$i] . ".jpg"))
 		require("thumbnail_imdb.php");
 ?>
-	<span class="item<?php if ($morf_series[$i] == $folder_series):?> currentlyplaying<?php endif;?>" id="<?php echo rawurlencode($morf_series[$i]);?>">
-		<a href="?folder=<?php echo rawurlencode($morf_series[$i]);?>&amp;id=0&amp;mode=<?php echo $mode;?>">
-			<img src="metadata/<?php echo rawurlencode($morf_series[$i]);?>.jpg" alt="Missing image.">
-		<br><span class="smalltit"><?php echo htmlentities($morf_series[$i], ENT_COMPAT, "UTF-8");?></span>
+	<span class="item<?php if ($morf_shows[$i] == $folder_shows):?> currentlyplaying<?php endif;?>" id="<?php echo rawurlencode($morf_shows[$i]);?>">
+		<a href="?folder=<?php echo rawurlencode($morf_shows[$i]);?>&amp;id=0&amp;mode=<?php echo $mode;?>">
+			<img src="metadata/<?php echo rawurlencode($morf_shows[$i]);?>.jpg" alt="Missing image.">
+		<br><span class="smalltit"><?php echo htmlentities($morf_shows[$i], ENT_COMPAT, "UTF-8");?></span>
 		</a>
 		
 		<!--<form action="thumbnail_imdb.php" method="post" enctype="multipart/form-data" style="display:visible;">
-			<input type="file" name="<?php echo $morf_series[$i];?>">
+			<input type="file" name="<?php echo $morf_shows[$i];?>">
 			<input type="submit" value="Go!">
-			<input type="hidden" name="posterimage" value="<?php echo $morf_series[$i];?>">
+			<input type="hidden" name="posterimage" value="<?php echo $morf_shows[$i];?>">
 			<input type="hidden" name="returnurl" value="<?php echo $_SERVER["REQUEST_URI"];?>">
 		</form>-->
 		
@@ -152,16 +159,24 @@ for($i=2; $i < count($morf_series); $i++){
 </div>
 
 <div class="sidepanel episodes" id="episodes">
-<?php // ------------------- EPSISODES -------------------
+<?php // ------------------------------------- EPSISODES -------------------------------------
 for($i=0; $i < count($morf_mediafiles); $i++){
+$morf_thumbnail = dirname(__FILE__) . "/metadata/" . $folder . "/" . basename($morf_mediafiles[$i]). ".jpg";
+$morf_thumbnail_url = str_replace("%2F","/", rawurlencode($folder))."/".rawurlencode(basename($morf_mediafiles[$i]));
 ?>
 	<span class="item<?php if ($i == $morf_mediaid):?> currentlyplaying<?php endif;?>" id="<?php echo rawurlencode(basename($morf_mediafiles[$i]));?>">
 		<a href="?folder=<?php echo $folder_url ?>&amp;id=<?php echo $i;?>&amp;mode=<?php echo $mode;?>">
-			<img src="metadata/<?php echo str_replace("%2F","/", rawurlencode($folder));?>/<?php echo rawurlencode(basename($morf_mediafiles[$i]));?>.jpg" 
+<?php if (file_exists($morf_thumbnail) && filesize($morf_thumbnail)>0):?>
+			<img src="<?php echo "metadata/".$morf_thumbnail_url.".jpg";?>" 
 				title="<?php htmlentities($morf_mediafiles[$i], ENT_COMPAT, "UTF-8");?>" 
 				alt="Image missing." class="thumbnail">
-				<!--onmouseover="this.src='metadata/<?php echo str_replace("%2F","/", rawurlencode($folder));?>/<?php echo rawurlencode(basename($morf_mediafiles[$i]));?>.jpg'"
-				onmouseout="this.src='metadata/<?php echo str_replace("%2F","/", rawurlencode($folder));?>/<?php echo rawurlencode(basename($morf_mediafiles[$i]));?>_antispoiler.jpg'"-->
+				<!--onmouseover="this.src='metadata/<?php echo $morf_thumbnail_url?>.jpg'"
+				onmouseout="this.src='metadata/<?php echo $morf_thumbnail_url?>_antispoiler.jpg'"-->
+<?php elseif ((file_exists($morf_thumbnail) && filesize($morf_thumbnail)==0) || $i == $morf_mediaid) :?>
+			<img src="icons/ajax-loader.gif" alt="Making thumbnail..." title="Making thumbnail..." class="thumbnail">
+<?php else:?>
+			<img src="icons/Status-missing-icon.png" alt="Thumbnail missing." title="Thumbnail missing." class="thumbnail">
+<?php endif;?>
 			<br><span class="smalltit"><?php echo htmlentities(basename($morf_mediafiles[$i]), ENT_COMPAT, "UTF-8");?></span>
 		</a>
 	</span>
@@ -170,6 +185,7 @@ for($i=0; $i < count($morf_mediafiles); $i++){
 ?>
 </div>
 <br>
+
 <div id="content">
 
 <span class="smalltit"><?php echo $folder_html;?></span><br>
@@ -274,7 +290,7 @@ endif; // ------------------------------------------
 
 <div class="smalltit">
 <pre>
-	<?php echo round((disk_free_space($morf_seriespath) / 1024 / 1024 / 1024), 2) . " GB free in " . $morf_seriespath;?>
+	<?php echo round((disk_free_space($morf_showspath) / 1024 / 1024 / 1024), 2) . " GB free in " . $morf_showspath;?>
 </pre>
 <?php
 if ($is_mkv){
