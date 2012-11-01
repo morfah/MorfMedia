@@ -23,7 +23,7 @@ $morf_showspath="nas/Serier/";
 $morf_shows = scandir(dirname(__FILE__) . "/" . $morf_showspath);
 
 $morf_mediafilepath= $morf_showspath . $folder . "/";
-$morf_mediafiles = glob($morf_mediafilepath . "*.{avi,mkv}", GLOB_BRACE);
+$morf_mediafiles = glob($morf_mediafilepath . "*.{avi,mkv,wmv}", GLOB_BRACE);
 sort($morf_mediafiles); //Sort epsiodes alphabetically.
 
 $morf_mediafilename = basename($morf_mediafiles[$morf_mediaid]);
