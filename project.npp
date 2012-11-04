@@ -19,5 +19,6 @@
         <File name="thumbnail.php" />
         <File name="thumbnail_imdb.php" />
         <File name="validate.php" />
+        <File name="init.php" />
     </Project>
 </NotepadPlus>
