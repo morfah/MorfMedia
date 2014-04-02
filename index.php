@@ -20,11 +20,11 @@ require("init.php");
 			}
 		}
 	</script>
-		  
+
 	<!-- adds some more features to the html5 player -->
 	<link href="video-js/dist/video-js.css" rel="stylesheet">
 	<script src="video-js/dist/video.js"></script>
-	
+
 <?php if($is_mkv):?>
 	<!-- adds .ass subtitle support -->
 	<link href="html5-ass-subtitles/example.css" rel="stylesheet">
@@ -41,7 +41,7 @@ require("init.php");
 				//alert(err);
 			}
 		}
-		
+
 		function loadSubtitles(){
 			try{
 				prepareCaptions();
@@ -51,7 +51,7 @@ require("init.php");
 				//alert(err);
 			}
 		}
-		
+
 	var httpRequest;
 	if (window.XMLHttpRequest) { // Mozilla, Safari, ...
 		httpRequest = new XMLHttpRequest();
@@ -67,7 +67,7 @@ require("init.php");
 <?php
 	if (!file_exists(dirname(__FILE__) . "/metadata/" . $folder . "/" . $morf_mediafilename . ".jpg"))
 		require("thumbnail.php");
-		
+
 		//animes only? FIXME: this always assumes track id3 is subtitles
 	if (!file_exists(dirname(__FILE__) . "/metadata/" . $folder . "/" . $morf_mediafilename . ".ass") && $is_mkv)
 		require("subtitles.php");
@@ -76,22 +76,25 @@ require("init.php");
 <div class="sidepanel movies" id="movies">
 <?php // ------------------------------------- SHOWS -------------------------------------
 for($i=2; $i < count($morf_shows); $i++){
-	if (!file_exists(dirname(__FILE__) . "/metadata/" . $morf_shows[$i] . ".jpg"))
+	if (!file_exists(dirname(__FILE__) . "/metadata/" . $morf_shows[$i] . ".jpg")){
+		echo "<!-- Did not find poster image for ".$morf_shows[$i].". Attempts to find one on imdb... -->";
 		require("thumbnail_imdb.php");
+	}
+
 ?>
 	<span class="item<?php if ($morf_shows[$i] == $folder_shows):?> currentlyplaying<?php endif;?>" id="<?php echo rawurlencode($morf_shows[$i]);?>">
 		<a href="?folder=<?php echo rawurlencode($morf_shows[$i]);?>&amp;id=0&amp;mode=<?php echo $mode;?>">
 			<img src="metadata/<?php echo rawurlencode($morf_shows[$i]);?>.jpg" alt="Missing image.">
 		<br><span class="smalltit"><?php echo htmlentities($morf_shows[$i], ENT_COMPAT, "UTF-8");?></span>
 		</a>
-		
+
 		<!--<form action="thumbnail_imdb.php" method="post" enctype="multipart/form-data" style="display:visible;">
 			<input type="file" name="<?php echo $morf_shows[$i];?>">
 			<input type="submit" value="Go!">
 			<input type="hidden" name="posterimage" value="<?php echo $morf_shows[$i];?>">
 			<input type="hidden" name="returnurl" value="<?php echo $_SERVER["REQUEST_URI"];?>">
 		</form>-->
-		
+
 	</span>
 <?php
 }
@@ -107,8 +110,8 @@ $morf_thumbnail_url = str_replace("%2F","/", rawurlencode($folder))."/".rawurlen
 	<span class="item<?php if ($i == $morf_mediaid):?> currentlyplaying<?php endif;?>" id="<?php echo rawurlencode(basename($morf_mediafiles[$i]));?>">
 		<a href="?folder=<?php echo $folder_url ?>&amp;id=<?php echo $i;?>&amp;mode=<?php echo $mode;?>">
 <?php if (file_exists($morf_thumbnail) && filesize($morf_thumbnail)>0):?>
-			<img src="<?php echo "metadata/".$morf_thumbnail_url.".jpg";?>" 
-				title="<?php htmlentities($morf_mediafiles[$i], ENT_COMPAT, "UTF-8");?>" 
+			<img src="<?php echo "metadata/".$morf_thumbnail_url.".jpg";?>"
+				title="<?php htmlentities($morf_mediafiles[$i], ENT_COMPAT, "UTF-8");?>"
 				alt="Image missing." class="thumbnail">
 				<!--onmouseover="this.src='metadata/<?php echo $morf_thumbnail_url?>.jpg'"
 				onmouseout="this.src='metadata/<?php echo $morf_thumbnail_url?>_antispoiler.jpg'"-->
@@ -150,9 +153,9 @@ elseif ($mode == "divx"):
 	<param name="previewImage" value="<?php echo $morf_metadata_poster_url;?>">
 	<param name="autoPlay" value="true">
 	<param name="src" value="<?php echo $morf_movie_url;?>">
-	
+
 	<embed type="video/divx" src="<?php echo $morf_movie_url;?>"
-		custommode="none" width="1280" height="720" autoPlay="true" 
+		custommode="none" width="1280" height="720" autoPlay="true"
 		previewImage="<?php echo $morf_metadata_poster_url;?>"
 		pluginspage="http://go.divx.com/plugin/download/">
 </object>
@@ -187,7 +190,7 @@ elseif ($mode == "wmp"):
 	<param name="autostart" value="1">
 	<param name="uiMode" value="full">
 	<param name="autosize" value="1">
-	<param name="playcount" value="1"> 
+	<param name="playcount" value="1">
 	<embed type="application/x-mplayer2" src="<?php echo $morf_movie_url;?>" width="1280" height="720" autostart="true" showcontrols="true" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/">
 </object>
 <?php

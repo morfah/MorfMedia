@@ -9,7 +9,7 @@ if (isset($_POST["posterimage"])){
 
 	$posterimage = $_POST["posterimage"];
 	$files_posterimage = str_replace(" ", "_", $_POST["posterimage"]);
-	
+
 	$returnurl = $_POST["returnurl"];
 	$morf_posterfile = dirname(__FILE__) . "/metadata/" . $posterimage . ".jpg";
 	$morf_posterfile_shell = escapeshellarg($morf_posterfile);
@@ -22,20 +22,23 @@ if (isset($_POST["posterimage"])){
 					move_uploaded_file($_FILES[$files_posterimage]["tmp_name"], $morf_posterfile);
 
 	header("location: $returnurl");
+
+	if (filesize($morf_posterfile))
+		exec("convert $morf_posterfile_shell -resize 160x9999 $morf_posterfile_shell 2>&1");
 }
 
 //else we try to get a image from IMDB.
 else{
 	// poster image.
-	$imdb = json_decode(file_get_contents("http://www.imdbapi.com/?t=" . rawurlencode($morf_shows[$i])));
-	$morf_posterfile = dirname(__FILE__) . "/metadata/" . $morf_shows[$i] . ".jpg";
-	$morf_posterfile_shell = escapeshellarg($morf_posterfile);
-	$morf_posterurl_shell = escapeshellarg($imdb->{'Poster'});
+	//$imdb = json_decode(file_get_contents("http://www.imdbapi.com/?t=" . rawurlencode($morf_shows[$i])));
+	//$morf_posterfile = dirname(__FILE__) . "/metadata/" . $morf_shows[$i] . ".jpg";
+	//$morf_posterfile_shell = escapeshellarg($morf_posterfile);
+	//$morf_posterurl_shell = escapeshellarg($imdb->{'Poster'});
 	//echo "wget -O $morf_posterfile_shell $morf_posterurl_shell";
-	exec("wget -O $morf_posterfile_shell $morf_posterurl_shell 2>&1");
+	//exec("wget -O $morf_posterfile_shell $morf_posterurl_shell 2>&1");
 }
 
 //resize the image
-if (filesize($morf_posterfile))
-	exec("convert $morf_posterfile_shell -resize 160x9999 $morf_posterfile_shell 2>&1");
+//if (filesize($morf_posterfile))
+//	exec("convert $morf_posterfile_shell -resize 160x9999 $morf_posterfile_shell 2>&1");
 ?>
